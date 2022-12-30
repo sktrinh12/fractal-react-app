@@ -1,50 +1,43 @@
 import React from 'react'
+// import Vector from './Vectors'
 
-const calcOpp = (theta, hypot) => {
-  return Math.sin(theta) * hypot
-}
+const Path = ({ path, tree }) => {
+  console.log(tree)
+  if (tree.length > 2) {
+    // let mR
+    // let mL
+    path += ' L '
+    const branches = tree.slice(2)
+    // console.log(branches)
+    branches.forEach((vector, i) => {
+      const lVectors = vector.components
+      const rVectors = vector.rightComponents
+      // if (branches.length > 1) {
+      //   mR = `m ${-rVectors[0]} ${-rVectors[1]}`
+      //   mL = `m ${-lVectors[0]} ${-lVectors[1]}`
+      // }
+      path += ` ${rVectors[0]} ${rVectors[1]}  ${lVectors[0]} ${lVectors[1]}`
+    })
+  }
 
-const calcAdj = (theta, hypot) => {
-  return Math.cos(theta) * hypot
-}
+  console.log(path)
 
-const generateDPath = (startingPath, theta, X, Y, moveUp, n, setPath) => {
-  const path = setPath(`${startingPath} l ${calcAdj(
-    theta,
-    ((Y * 2 * n) / 3) * n
-  )} ${calcOpp(theta, ((Y * 2 * n) / 3) * n)}
-				m -${calcAdj(theta, ((Y * 2 * n) / 3) * n)} ${-calcOpp(
-    theta,
-    ((Y * 2 * n) / 3) * n
-  )}
--${calcAdj(theta, ((Y * 2 * n) / 3) * n)} ${calcOpp(
-    theta,
-    ((Y * 2 * n) / 3) * n
-  )}`)
-  return path
-}
-
-const Path = ({ path }) => {
-  const theta = 225
-  const distance = 400
-  const moveUp = 80
   return (
     <svg
       xmlns='http://www.w3.org/2000/svg'
       xmlnsXlink='http://www.w3.org/1999/xlink'
-      viewBox='0 0 400 400'
+      width='100%'
+      viewBox='-200 -500 400 600'
     >
-      <path
-        id='path0'
-        fill='none'
-        stroke='#1ABC9C'
-        strokeWidth='5'
-        d={`M200 ${distance + moveUp}, v -${moveUp * 2}
-						l ${calcAdj(theta, (moveUp * 2) / 3)} ${calcOpp(theta, (moveUp * 2) / 3)}
-m -${calcAdj(theta, (moveUp * 2) / 3)} ${-calcOpp(theta, (moveUp * 2) / 3)}
-						-${calcAdj(theta, (moveUp * 2) / 3)} ${calcOpp(theta, (moveUp * 2) / 3)}
-																`}
-      />
+      {tree.length > 1 && (
+        <path
+          id='path0'
+          fill='none'
+          stroke='#1ABC9C'
+          strokeWidth='6'
+          d={path}
+        />
+      )}
     </svg>
   )
 }
