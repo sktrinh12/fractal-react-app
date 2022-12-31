@@ -23,10 +23,11 @@ function App() {
   const vectorRoot = new Vector(0, Yorigin)
   let vector = new Vector(0, 0)
   const [tree, setTree] = useState([vectorRoot])
-  // const [X, setX] = useState(0)
-  // const [Y, setY] = useState(0)
+  const [X, setX] = useState(0)
+  const [Y, setY] = useState(0)
   const origin = `M 0 ${Yorigin} v -${Yorigin}`
 
+  const [branches, setBranches] = useState([])
   const handleCountClick = () => {
     // console.log(count)
     // const distance = tree[count].subtract(vector)
@@ -48,14 +49,18 @@ function App() {
     // console.log(tree)
     setTree([...tree, vector])
     setCount(count + 1)
-    // setX(X + Math.abs(tree[count].components[0]))
-    // setY(Y + count !== 0 ? Math.abs(tree[count].components[1]) : 0)
+    setX(X + Math.abs(tree[count].components[0]))
+    setY(Y + count !== 0 ? Math.abs(tree[count].components[1]) : 0)
+
+    const d = `M ${X} ${Y} L ${tree[count].components[0]} ${tree[count].components[1]} `
+    console.log(d)
+    setBranches([...branches, d])
   }
 
   return (
     <>
       <div>
-        <Path path={origin} tree={tree} />
+        <Path path={origin} branches={branches} />
       </div>
       <h1>Fractal Tree</h1>
       <div className='card'>
