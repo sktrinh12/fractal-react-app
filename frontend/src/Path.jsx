@@ -1,25 +1,32 @@
 import React from 'react'
-// import Vector from './Vectors'
 
 const Path = ({ path, tree }) => {
+  console.log('tree')
   console.log(tree)
-  if (tree.length > 2) {
-    // let mR
-    // let mL
-    path += ' L '
-    const branches = tree.slice(2)
-    // console.log(branches)
-    branches.forEach((vector, i) => {
-      const lVectors = vector.components
-      const rVectors = vector.rightComponents
-      // if (branches.length > 1) {
-      //   mR = `m ${-rVectors[0]} ${-rVectors[1]}`
-      //   mL = `m ${-lVectors[0]} ${-lVectors[1]}`
-      // }
-      path += ` ${rVectors[0]} ${rVectors[1]}  ${lVectors[0]} ${lVectors[1]}`
-    })
-  }
+  // console.log(`X:${X}, Y:${Y}`)
+  // if (tree.length > 1) {
+  //   path += ' l '
+  //   const branches = tree.slice(1)
+  //   branches.forEach((vector, i) => {
+  //     const lVectors = vector.components
+  //     const rVectors = vector.rightComponents
+  //     path += ` ${rVectors[0]} ${rVectors[1]}  ${lVectors[0]} ${lVectors[1]}`
+  //     // path += ` ${lVectors[0]} ${lVectors[1]}`
+  //     // path += ` ${rVectors[0]} ${rVectors[1]}`
+  //   })
+  // }
 
+  if (tree.length > 1) {
+    path += ' l'
+    const branches = tree.slice(1)
+    // console.log(branches)
+    for (let j = 1; j <= branches.length; j++) {
+      // const multi = 2 * j
+      const lVec = branches[j - 1].components
+      const rVec = branches[j - 1].rightComponents
+      path += ` ${lVec[0]} ${lVec[1]} `
+    }
+  }
   console.log(path)
 
   return (
@@ -29,15 +36,7 @@ const Path = ({ path, tree }) => {
       width='100%'
       viewBox='-200 -500 400 600'
     >
-      {tree.length > 1 && (
-        <path
-          id='path0'
-          fill='none'
-          stroke='#1ABC9C'
-          strokeWidth='6'
-          d={path}
-        />
-      )}
+      <path id='path0' fill='none' stroke='#1ABC9C' strokeWidth='6' d={path} />
     </svg>
   )
 }

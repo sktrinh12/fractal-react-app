@@ -6,41 +6,50 @@ import Path from './Path'
 function App() {
   const [count, setCount] = useState(0)
   // const [colour, setColour] = useState('#CA6F1E')
-  const Y = 100
+  const Yorigin = 100
   const theta = (Math.PI * 5) / 4
-  const vectorRoot = new Vector(0, Y)
-  const [vector, setVector] = useState(new Vector(0, 0))
-  const [tree, setTree] = useState([vectorRoot.subtract(vector)])
-  const origin = `M 0 ${Y} v -${Y}`
+  // const rotateLeftVector = new Vector(
+  //   Math.cos(-theta),
+  //   -Math.sin(-theta),
+  //   Math.sin(-theta),
+  //   Math.cos(-theta)
+  // )
+  const rotateRightVector = new Vector(
+    Math.cos(theta),
+    -Math.sin(theta),
+    Math.sin(theta),
+    Math.cos(theta)
+  )
+  const vectorRoot = new Vector(0, Yorigin)
+  let vector = new Vector(0, 0)
+  const [tree, setTree] = useState([vectorRoot])
+  // const [X, setX] = useState(0)
+  // const [Y, setY] = useState(0)
+  const origin = `M 0 ${Yorigin} v -${Yorigin}`
+
   const handleCountClick = () => {
-    setCount(count + 1)
-    const distance = tree[count].subtract(vector)
-    const rotateLeftVector = new Vector(
-      Math.cos(-theta),
-      -Math.sin(-theta),
-      Math.sin(-theta),
-      Math.cos(-theta)
-    )
+    // console.log(count)
+    // const distance = tree[count].subtract(vector)
+    // const distance = vector.subtract(tree[count])
+    const begin = tree[count]
+    // const rightEnd = begin
+    //   .multiply(rotateRightVector) // rotate
+    //   .scaleBy(2 / 3)
 
-    const rotateRightVector = new Vector(
-      Math.cos(theta),
-      -Math.sin(theta),
-      Math.sin(theta),
-      Math.cos(theta)
-    )
+    // const newEnd = begin.multiply(rotateLeftVector).scaleBy(2 / 3)
+    const newEnd = begin.multiply(rotateRightVector).scaleBy(2 / 3)
 
-    const rightEnd = distance
-      .multiply(rotateRightVector) // rotate
-      .scaleBy(2 / 3)
-      .add(vector)
-    const newEnd = distance
-      .multiply(rotateLeftVector)
-      .scaleBy(2 / 3)
-      .add(vector)
-    newEnd['rightComponents'] = rightEnd.components
-    setVector(newEnd)
-    setTree([...tree, vector])
+    // newEnd['rightComponents'] = rightEnd.components
+    vector = newEnd
+
+    // console.log('vector')
+    // console.log(vector)
+    // console.log('tree')
     // console.log(tree)
+    setTree([...tree, vector])
+    setCount(count + 1)
+    // setX(X + Math.abs(tree[count].components[0]))
+    // setY(Y + count !== 0 ? Math.abs(tree[count].components[1]) : 0)
   }
 
   return (
