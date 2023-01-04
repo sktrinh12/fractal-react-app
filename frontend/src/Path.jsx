@@ -1,32 +1,32 @@
 import React from 'react'
+import Branch from './Branch'
+import Vector from './Vectors'
 
-const Path = ({ path, branches }) => {
-  // console.log(`X:${X}, Y:${Y}`)
-  // if (tree.length > 1) {
-  //   path += ' l '
-  //   const branches = tree.slice(1)
-  //   branches.forEach((vector, i) => {
-  //     const lVectors = vector.components
-  //     const rVectors = vector.rightComponents
-  //     path += ` ${rVectors[0]} ${rVectors[1]}  ${lVectors[0]} ${lVectors[1]}`
-  //     // path += ` ${lVectors[0]} ${lVectors[1]}`
-  //     // path += ` ${rVectors[0]} ${rVectors[1]}`
-  //   })
-  // }
+const Yorigin = 100
+const vectorRoot = new Vector(0, Yorigin)
+const vector = new Vector(0, 0)
+const branchOrigin = new Branch(
+  vectorRoot.components[0],
+  vectorRoot.components[1],
+  vector.components[0],
+  vector.components[1]
+)
+const tree = []
+const theta = (-Math.PI * 5) / 4
+tree[0] = branchOrigin
 
-  // if (tree.length > 1) {
-  //   path += ' l'
-  //   const branches = tree.slice(1)
-  //   // console.log(branches)
-  //   for (let j = 1; j <= branches.length; j++) {
-  //     // const multi = 2 * j
-  //     const lVec = branches[j - 1].components
-  //     // const rVec = branches[j - 1].rightComponents
-  //     path += ` ${lVec[0]} ${lVec[1]} `
-  //   }
-  // }
-  // console.log(path)
-
+const Path = ({ count }) => {
+  let j, i
+  for (j = 0; j < count; j++) {
+    for (i = tree.length - 1; i >= 0; i--) {
+      if (!tree[i].finished) {
+        tree.push(tree[i].branch(theta))
+        tree.push(tree[i].branch(-theta))
+      }
+      tree[i].finished = true
+    }
+  }
+  console.log(tree)
   return (
     <svg
       xmlns='http://www.w3.org/2000/svg'
@@ -34,18 +34,28 @@ const Path = ({ path, branches }) => {
       width='100%'
       viewBox='-200 -500 400 600'
     >
-      <path id='path0' fill='none' stroke='#1ABC9C' strokeWidth='6' d={path} />
-      {branches.map((d, i) => {
-        return (
-          <path
-            id={`path${i}`}
-            fill='none'
-            stroke='#1ABC9C'
-            strokeWidth='6'
-            d={d}
-          />
-        )
-      })}
+      {tree &&
+        tree.map((br, i) => {
+          const path = br.path()
+          const x1 = path[0]
+          const y1 = path[1]
+          const x2 = path[2]
+          const y2 = path[3]
+          return (
+            <path
+              key={`path${i}`}
+              id={`path${i}`}
+              fill='none'
+              stroke='#1ABC9C'
+              strokeWidth='3'
+              d={
+                i === 0
+                  ? `M ${x1} ${y1} v -${y1}`
+                  : `m ${x1} ${y1} L ${x2} ${y2}`
+              }
+            />
+          )
+        })}
     </svg>
   )
 }
