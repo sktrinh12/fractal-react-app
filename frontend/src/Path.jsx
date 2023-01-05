@@ -3,6 +3,9 @@ import Branch from './Branch'
 import Vector from './Vectors'
 
 const Yorigin = 100
+let strokeW = 7
+const SWdecr = 0.65
+const strokeArray = [strokeW]
 const vectorRoot = new Vector(0, Yorigin)
 const vector = new Vector(0, 0)
 const branchOrigin = new Branch(
@@ -12,21 +15,23 @@ const branchOrigin = new Branch(
   vector.components[1]
 )
 const tree = []
-const theta = (-Math.PI * 5) / 4
 tree[0] = branchOrigin
 
-const Path = ({ count }) => {
+const Path = ({ count, theta, colour }) => {
   let j, i
   for (j = 0; j < count; j++) {
+    strokeW *= SWdecr
     for (i = tree.length - 1; i >= 0; i--) {
       if (!tree[i].finished) {
         tree.push(tree[i].branch(theta))
         tree.push(tree[i].branch(-theta))
       }
       tree[i].finished = true
+      strokeArray.push(strokeW, strokeW)
     }
   }
-  console.log(tree)
+  // console.log(tree)
+  // console.log(strokeArray)
   return (
     <svg
       xmlns='http://www.w3.org/2000/svg'
@@ -41,13 +46,14 @@ const Path = ({ count }) => {
           const y1 = path[1]
           const x2 = path[2]
           const y2 = path[3]
+          const id = `path${i}`
           return (
             <path
-              key={`path${i}`}
-              id={`path${i}`}
+              key={id}
+              id={id}
               fill='none'
-              stroke='#1ABC9C'
-              strokeWidth='3'
+              stroke={colour}
+              strokeWidth={eval(strokeArray[i])}
               d={
                 i === 0
                   ? `M ${x1} ${y1} v -${y1}`

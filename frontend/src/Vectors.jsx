@@ -54,7 +54,8 @@ class Vector {
         }
       }
     }
-    return new Vector(product[0][0], product[0][1])
+    product = product.flat(2)
+    return new Vector(product[0], product[1])
   }
 }
 
