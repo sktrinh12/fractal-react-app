@@ -1,48 +1,37 @@
 import { useState } from 'react'
+import ColourPicker from './ColourPicker'
 import './App.css'
 import Path from './Path'
 import ThetaSlider from './Slider'
-import { BlockPicker } from 'react-color'
-
-const paletteColours = [
-  '#EA3221',
-  '#EA8B21',
-  '#EAEA21',
-  '#21EA26',
-  '#21EAE3',
-  '#2199EA',
-  '#2135EA',
-  '#6021EA',
-  '#E521EA',
-  '#EA2168',
-]
 
 function App() {
   const startTheta = (7 * Math.PI) / 6
   const [count, setCount] = useState(0)
   const [theta, setTheta] = useState(startTheta)
-  const [colour, setColour] = useState('#CA6F1E')
-  const handleChangeColour = (colour) => {
-    setColour(colour.hex)
-  }
+  const [colour, setColour] = useState('#30B05D')
+  const [displayColourPicker, setDisplayColour] = useState(false)
+  const [chgTheta, setChgTheta] = useState(false)
   const handleCountClick = () => {
     console.log(count)
     setCount(count + 1)
+    setChgTheta(false)
   }
   const updateSlider = (e, theta) => {
     setTheta(theta)
+    setChgTheta(true)
   }
   return (
     <>
       <div>
-        <Path count={count} theta={theta} colour={colour} />
+        <Path count={count} theta={theta} chgTheta={chgTheta} colour={colour} />
       </div>
       <h1>Fractal Tree</h1>
       <ThetaSlider theta={theta} updateSlider={updateSlider} colour={colour} />
-      <BlockPicker
-        color={colour}
-        onChangeComplete={handleChangeColour}
-        colors={paletteColours}
+      <ColourPicker
+        colour={colour}
+        setColour={setColour}
+        displayColourPicker={displayColourPicker}
+        setDisplayColour={setDisplayColour}
       />
       <div className='card'>
         <button onClick={handleCountClick}>count is {count}</button>
