@@ -3,7 +3,7 @@ import Vector from './Vectors'
 
 const Yorigin = 100
 let strokeW = 7
-const SWdecr = 0.92
+const SWdecr = 0.89
 const strokeArray = []
 const vectorRoot = new Vector(0, Yorigin)
 const vector = new Vector(0, 0)
@@ -13,44 +13,27 @@ const branchOrigin = new Branch(
   vector.components[0],
   vector.components[1]
 )
-let tree = [branchOrigin]
-let secTree = [branchOrigin]
 
-const Path = ({ count, theta, chgTheta, colour }) => {
-  let i, prevTree, biVal
-  const binaryCount = Math.pow(2, count) - 1
-  if (!chgTheta) {
-    biVal = 0
-    const biNumArr = []
-    for (i = 0; i < binaryCount; i++) {
-      biVal += Math.pow(2, i)
-      biNumArr.push(biVal)
-      if (biNumArr.includes(i)) {
-        strokeW *= SWdecr
-      }
-      if (!tree[i].finished) {
-        tree.push(tree[i].branch(theta))
-        tree.push(tree[i].branch(-theta))
-        strokeArray.push(strokeW)
-      }
-      tree[i].finished = true
+const Path = ({ count, theta, colour }) => {
+  let i, biVal, prevTree
+  const binaryCount = Math.pow(2, count)
+  // console.log(binaryCount)
+  biVal = 0
+  const biNumArr = []
+  let tree = [branchOrigin]
+  for (i = 1; i < binaryCount; i++) {
+    biVal += Math.pow(2, i)
+    biNumArr.push(biVal)
+    if (biNumArr.includes(i)) {
+      strokeW *= SWdecr
     }
-  } else {
-    // first time swapping trees
-    secTree = [branchOrigin]
-    if (count > 0) {
-      for (i = 1; i <= binaryCount; i++) {
-        prevTree = secTree[i - 1]
-        secTree.push(prevTree.branch(theta))
-        secTree.push(prevTree.branch(-theta))
-      }
-      tree = secTree
-    }
+    prevTree = tree[i - 1]
+    tree.push(prevTree.branch(theta))
+    tree.push(prevTree.branch(-theta))
+    strokeArray.push(strokeW)
   }
-  console.log('tree')
-  console.log(tree)
-  console.log('secTree')
-  console.log(secTree)
+  // console.log('tree')
+  // console.log(tree)
   // console.log(strokeArray)
   return (
     <svg
@@ -59,7 +42,7 @@ const Path = ({ count, theta, chgTheta, colour }) => {
       width='100%'
       viewBox='-200 -200 400 300'
     >
-      {(chgTheta ? secTree : tree).map((br, i) => {
+      {tree.map((br, i) => {
         const path = br.path()
         const x1 = path[0]
         const y1 = path[1]
