@@ -5,7 +5,7 @@ import Path from './Path'
 import ThetaSlider from './Slider'
 import FractalTriangle from './FractalTriangle'
 
-function App({ slider }) {
+function App({ type }) {
   const startTheta = (7 * Math.PI) / 6
   const [count, setCount] = useState(0)
   const [colour, setColour] = useState('#30B05D') // greenish
@@ -25,16 +25,13 @@ function App({ slider }) {
   return (
     <>
       {' '}
-      {slider && <Path count={count} theta={theta} colour={colour} />}
-      {!slider && <FractalTriangle count={count} colour={colour} />}
-      <h1>Fractal {slider ? 'Tree' : 'Triangle'}</h1>
-      {slider && (
-        <ThetaSlider
-          theta={theta}
-          updateSlider={updateSlider}
-          colour={colour}
-        />
+      {type === 'tree' ? (
+        <Path count={count} theta={theta} colour={colour} />
+      ) : (
+        <FractalTriangle count={count} colour={colour} theta={theta} />
       )}
+      <h1>Fractal {type === 'tree' ? 'Tree' : 'Triangle'}</h1>
+      <ThetaSlider theta={theta} updateSlider={updateSlider} colour={colour} />
       <ColourPicker
         colour={colour}
         setColour={setColour}
