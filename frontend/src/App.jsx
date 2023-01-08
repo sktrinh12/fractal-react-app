@@ -22,9 +22,7 @@ function App() {
   }
   return (
     <>
-      <div>
-        <Path count={count} theta={theta} chgTheta={chgTheta} colour={colour} />
-      </div>
+      <Path count={count} theta={theta} chgTheta={chgTheta} colour={colour} />
       <h1>Fractal Tree</h1>
       <ThetaSlider theta={theta} updateSlider={updateSlider} colour={colour} />
       <ColourPicker
