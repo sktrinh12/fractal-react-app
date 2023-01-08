@@ -10,19 +10,16 @@ function App() {
   const [theta, setTheta] = useState(startTheta)
   const [colour, setColour] = useState('#30B05D')
   const [displayColourPicker, setDisplayColour] = useState(false)
-  const [chgTheta, setChgTheta] = useState(false)
   const handleCountClick = () => {
     console.log(count)
     setCount(count + 1)
-    setChgTheta(false)
   }
   const updateSlider = (e, theta) => {
     setTheta(theta)
-    setChgTheta(true)
   }
   return (
     <>
-      <Path count={count} theta={theta} chgTheta={chgTheta} colour={colour} />
+      <Path count={count} theta={theta} colour={colour} />
       <h1>Fractal Tree</h1>
       <ThetaSlider theta={theta} updateSlider={updateSlider} colour={colour} />
       <ColourPicker
