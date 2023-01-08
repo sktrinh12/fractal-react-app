@@ -23,26 +23,26 @@ class Vector {
     return new Vector(...this.components.map((component) => component * number))
   }
 
+  #toMatrix = (arr, width) =>
+    arr.reduce(
+      (rows, key, index) =>
+        (index % width == 0
+          ? rows.push([key])
+          : rows[rows.length - 1].push(key)) && rows,
+      []
+    )
+
   multiply({ components }) {
-    const toMatrix = (arr, width) =>
-      arr.reduce(
-        (rows, key, index) =>
-          (index % width == 0
-            ? rows.push([key])
-            : rows[rows.length - 1].push(key)) && rows,
-        []
-      )
+    const A = this.#toMatrix(this.components, 2)
+    const B = this.#toMatrix(components, 2)
 
-    const A = toMatrix(this.components, 2)
-    const B = toMatrix(components, 2)
-
-    let x = A.length,
-      z = A[0].length,
+    let x = A.length, // number of elements in array
+      z = A[0].length, // number of elements in first sub-array for both A/B
       y = B[0].length
     let productRow = Array.apply(null, new Array(y)).map(
       Number.prototype.valueOf,
       0
-    )
+    ) // initiate a zero-filled array
     let product = new Array(x)
     for (let p = 0; p < x; p++) {
       product[p] = productRow.slice()
